@@ -63,6 +63,12 @@ app.get('/api/auctions', async function(req, res) {
     return res.status(result.status).json(result.body);
 });
 
+app.get('/api/auctions/:auctionId', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const result = await auctionService.getAuctionById(auctionId);
+    return res.status(result.status).json(result.body);
+})
+
 // http://localhost:3000
 app.listen(3000, function() {
   console.log('Server is listening on port 3000');

@@ -12,8 +12,15 @@ const auctionService = () => {
         });
     };
 
-    const getAuctionById = (id, cb, errorCb) => {
-        // Your implementation goes here
+    const getAuctionById = async (auctionId) => {
+        return await globalTryCatch(async () => {
+            const result = await dbProvider.Auction.findById(auctionId);
+            return {
+                status: 200, 
+                body: result
+            }
+        });
+        
     };
 
     const getAuctionWinner = (auctionId, cb, errorCb) => {
