@@ -10,7 +10,7 @@ const artistService = () => {
                 body: artists
             };
         });
-    }
+    };
 
 
     const getArtistById = async (artistId) => {

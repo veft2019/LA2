@@ -24,10 +24,13 @@ const artService = () => {
 
     const createArt = async (art) => {
        return await globalTryCatch(async () => {
-           const result = await dbProvider.Art.create(art);
-           return {
-               status: 201, 
-               body: result
+            //const artist = await dbProvider.Artist.findById(art.artistId);
+            //const artist = await artistService.getArtistById(art.artistId);
+            //Check if the database throws an error or if we need to do something to check if the artist exists
+            const result = await dbProvider.Art.create(art);
+            return {
+                status: 201, 
+                body: result
             };
        })
     };
