@@ -26,8 +26,12 @@ const artistService = () => {
     });
   };
 
-  const createArtist = (artist, cb, errorCb) => {
-    // Your implementation goes here
+  const createArtist = async (artist) => {
+      return await globalTryCatch(async () => {
+        const stuff = await dbProvider.Artist.create(artist);
+        console.log(stuff);
+        return stuff;
+    });
   };
 
   return {

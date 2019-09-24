@@ -9,8 +9,7 @@ app.use(bodyParser.json());
 const artistService = require('./services/artistService');
 
 
-// Artist
-
+// Artists
 app.get('/api/artists', async function (req, res) {
     const statusCode = 200;
     const result = await artistService.getAllArtists();
@@ -30,7 +29,14 @@ app.get('/api/artists/:artistId', async function(req, res) {
     return res.status(statusCode).json(result);
 });
 
-
+app.post('/api/artists', async function(req, res) {
+    let statusCode = 201;
+    const result = await artistService.createArtist(req.body);
+    if(result.name.includes("Error")) {
+        statusCode = 400;
+    }
+    return res.status(statusCode).json(result);
+});
 
 // http://localhost:3000
 app.listen(3000, function() {
