@@ -12,7 +12,6 @@ const artistService = () => {
         });
     };
 
-
     const getArtistById = async (artistId) => {
         return await globalTryCatch(async () => {
             const result = await dbProvider.Artist.findById(artistId);
