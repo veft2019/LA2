@@ -7,6 +7,27 @@ const app = express();
 app.use(bodyParser.json());
 
 const artistService = require('./services/artistService');
+const artService = require('./services/artService');
+
+// Art
+app.get('/api/arts', async function (req, res) {
+    const statusCode = 200;
+    const result = await artService.getAllArts();
+    if(Object.entries(result).length === 0) {
+       statusCode = 404;
+    }
+    return res.status(statusCode).json(result);
+});
+
+app.get('/api/arts/:artId', async function(req, res) {
+    let statusCode = 200;
+    const artId = req.params.artId;
+    const result = await artService.getArtById(artId);
+    //if(result.includes("Error")) {
+        //statusCode = 404;
+    //}
+    return res.status(statusCode).json(result);
+});
 
 
 // Artists
@@ -37,6 +58,7 @@ app.post('/api/artists', async function(req, res) {
     }
     return res.status(statusCode).json(result);
 });
+
 
 // http://localhost:3000
 app.listen(3000, function() {
