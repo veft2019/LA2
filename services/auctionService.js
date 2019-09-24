@@ -5,6 +5,13 @@ const auctionService = () => {
     const getAllAuctions = async () => {
         return await globalTryCatch(async () => {
             const result = await dbProvider.Auction.find({});
+            if(result.length == 0) {
+                return {
+                    status: 404,
+                    body: "No auctions were found"
+                }
+            }
+
             return {
                 status: 200,
                 body: result
@@ -12,9 +19,16 @@ const auctionService = () => {
         });
     };
 
-    const getAuctionById = async (auctionId) => {
+    const getAuctionById = async (_auctionId) => {
         return await globalTryCatch(async () => {
-            const result = await dbProvider.Auction.findById(auctionId);
+            const result = await dbProvider.Auction.findById(_auctionId);
+            if(result == null) {
+                return {
+                    status: 404,
+                    body: "Auction with this id was not found"
+                }
+            }
+
             return {
                 status: 200,
                 body: result
@@ -22,28 +36,24 @@ const auctionService = () => {
         });
     };
 
-    const getAuctionWinner = async (auctionId) => {
+    const getAuctionWinner = async (_auctionId) => {
         return await globalTryCatch(async () => {
-            const result = await dbProvider.Auction.findById(auctionId);
-            if (result == null) {
+            const auctionValidtion = await dbProvider.Auction.findById(_auctionId);
+            if (auctionValidtion == null) {
                 return {
                     status: 404,
                     body: "Auction not found!"
                 }
             }
 
-            if (result.endDate.getTime() > Date.now()) {
+            if (auctionValidtion.endDate.getTime() > Date.now()) {
                 return {
                     status: 209,
                     body: "Conflict! - Auction has not ended!"
                 };
             }
 
-            const highestBid = await dbProvider.AuctionBid.find({
-                auctionId: auctionId
-            }).sort({
-                price: -1
-            });
+            const highestBid = await dbProvider.AuctionBid.find({auctionId: _auctionId}).sort({price: -1});
             if (highestBid.length == 0) {
                 return {
                     status: 200,
@@ -51,31 +61,29 @@ const auctionService = () => {
                 };
             }
 
-            const customer = await dbProvider.Customer.findById(highestBid[0].customerId);
+            const result = await dbProvider.Customer.findById(highestBid[0].customerId);
             return {
                 status: 200,
-                body: customer
+                body: result
             };
         });
     };
 
     const createAuction = async (auction) => {
         return await globalTryCatch(async () => {
-            const exists = await dbProvider.Auction.find({
-                artId: auction.artId
-            });
-            if (exists.length != 0) {
-                return {
-                    status: 409,
-                    body: "Conflict! - Auction already exists for this art item"
-                }
-            }
-
             const art = await dbProvider.Art.findById(auction.artId);
             if (art == null) {
                 return {
                     status: 404,
                     body: "Art work not found"
+                }
+            }
+
+            const exists = await dbProvider.Auction.find({artId: auction.artId});
+            if (exists.length != 0) {
+                return {
+                    status: 409,
+                    body: "Conflict! - Auction already exists for this art item"
                 }
             }
 
@@ -95,9 +103,9 @@ const auctionService = () => {
         });
     };
 
-    const getAuctionBidsWithinAuction = async (auctionId) => {
+    const getAuctionBidsWithinAuction = async (_auctionId) => {
         return await globalTryCatch(async () => {
-            const auctionValidation = await dbProvider.Auction.findById(auctionId);
+            const auctionValidation = await dbProvider.Auction.findById(_auctionId);
             if (auctionValidation == null) {
                 return {
                     status: 404,
@@ -105,21 +113,17 @@ const auctionService = () => {
                 }
             }
 
-            const bids = await dbProvider.AuctionBid.find({
-                auctionId: auctionId
-            }).sort({
-                price: -1
-            });
+            const result = await dbProvider.AuctionBid.find({auctionId: _auctionId}).sort({price: -1});
             return {
                 status: 200,
-                body: bids
+                body: result
             }
         });
     };
 
-    const placeNewBid = async (auctionId, customerId, price) => {
+    const placeNewBid = async (_auctionId, _customerId, _price) => {
         //Validate auction id
-        const auction = await dbProvider.Auction.findById(auctionId);
+        const auction = await dbProvider.Auction.findById(_auctionId);
         if (auction == null) {
             return {
                 status: 404,
@@ -128,7 +132,7 @@ const auctionService = () => {
         }
 
         //Validate customer id
-        const customer = await dbProvider.Customer.findById(customerId);
+        const customer = await dbProvider.Customer.findById(_customerId);
         if (customer == null) {
             return {
                 status: 404,
@@ -146,14 +150,10 @@ const auctionService = () => {
 
         //Find all bids for this auction, order by price
         //Check if price is higher than highest bid
-        const highestBid = await dbProvider.AuctionBid.find({
-            auctionId: auctionId
-        }).sort({
-            price: -1
-        });
+        const highestBid = await dbProvider.AuctionBid.find({auctionId: _auctionId}).sort({price: -1});
 
         //Check if price is higher than minimum price
-        if (auction.minimumPrice >= price || highestBid[0].price >= price) {
+        if (auction.minimumPrice >= _price || highestBid[0].price >= _price) {
             return {
                 status: 412,
                 body: "Bidding price too low!"
@@ -162,16 +162,13 @@ const auctionService = () => {
 
         //Create the bid
         await dbProvider.AuctionBid.create({
-            auctionId: auctionId,
-            customerId: customerId,
-            price: price
+            auctionId: _auctionId,
+            customerId: _customerId,
+            price: _price
         });
 
         //Update auction winner prtop of auction to customerId if everything valid
-        await dbProvider.Auction.findById(auctionId).updateOne({
-            auctionWinner: customerId
-        });
-        //console.log(stuff);
+        await dbProvider.Auction.findById(auctionId).updateOne({auctionWinner: _customerId});
 
         return {
             status: 202,

@@ -4,17 +4,14 @@ const globalTryCatch = require("../handlers/globalTryCatch");
 const customerService = () => {
     const getAllCustomers = async () => {
         return await globalTryCatch(async () => {
-            const customers = await dbProvider.Customer.find({});
-            return {
-                status: 200,
-                body: customers
-            };
-        });
-    };
+            const result = await dbProvider.Customer.find({});
+            if(result.length == 0) {
+                return {
+                    status: 404,
+                    body: "No customers were found"
+                }
+            }
 
-    const getCustomerById = async (customerId) => {
-        return await globalTryCatch(async () => {
-            const result = await dbProvider.Customer.findById(customerId);
             return {
                 status: 200,
                 body: result
@@ -22,11 +19,41 @@ const customerService = () => {
         });
     };
 
-    const getCustomerAuctionBids = async (customerId) => {
+    const getCustomerById = async (_customerId) => {
         return await globalTryCatch(async () => {
-            const result = await dbProvider.AuctionBid.find({
-                customerId: customerId
-            });
+            const result = await dbProvider.Customer.findById(_customerId);
+            if(result == null) {
+                return {
+                    status: 404,
+                    body: "Customer with this id was not found"
+                }
+            }
+
+            return {
+                status: 200,
+                body: result
+            };
+        });
+    };
+
+    const getCustomerAuctionBids = async (_customerId) => {
+        return await globalTryCatch(async () => {
+            const customer = await dbProvider.Customer.findById(_customerId);
+            if(customer == null) {
+                return {
+                    status: 404,
+                    body: "Customer with this id was not found"
+                }
+            }
+
+            const result = await dbProvider.AuctionBid.find({customerId: _customerId});
+            if(result.length == 0) {
+                return {
+                    status: 404,
+                    body: "No bids made by this customer were found"
+                }
+            }
+
             return {
                 status: 200,
                 body: result
