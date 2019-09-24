@@ -6,7 +6,7 @@ const artistService = () => {
             return await callback();
         } catch (err) {
             console.log(err);
-            let statusCode = 400;
+            let statusCode = 500;
             return {
                 status: statusCode,
                 body: err

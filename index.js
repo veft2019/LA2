@@ -47,6 +47,7 @@ app.post('/api/artists', async function(req, res) {
     return res.status(result.status).json(result.body);
 });
 
+// ================ CUSTOMERS =================== //
 
 // http://localhost:3000
 app.listen(3000, function() {
