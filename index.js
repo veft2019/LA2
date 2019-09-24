@@ -64,7 +64,6 @@ app.get('/api/customers/:customerId', async function(req, res) {
 
 //getCustomerAuctionBids
 ////http://localhost:3000/api/customers/:customerId [GET]
-//VIRKAR EKKI
 app.get('/api/customers/:customerId/auction-bids', async function(req, res) {
     const customerId = req.params.customerId;
     const result = await customerService.getCustomerAuctionBids(customerId);
