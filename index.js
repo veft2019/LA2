@@ -12,11 +12,23 @@ const artistService = require('./services/artistService');
 // Artist
 
 app.get('/api/artists', async function (req, res) {
-  const result = await artistService.getAllArtists();
-  return res.json(result);
+    const statusCode = 200;
+    const result = await artistService.getAllArtists();
+    if(Object.entries(result).length === 0) {
+        statusCode = 404;
+    }
+    return res.status(statusCode).json(result);
 });
 
-
+app.get('/api/artists/:artistId', async function(req, res) {
+    let statusCode = 200;
+    const artistId = req.params.artistId;
+    const result = await artistService.getArtistById(artistId);
+    if(result.name.includes("Error")) {
+        statusCode = 404;
+    }
+    return res.status(statusCode).json(result);
+});
 
 
 

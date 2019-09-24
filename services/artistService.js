@@ -2,33 +2,28 @@ const dbProvider = require("../data/db");
 
 const artistService = () => {
 
-  const globalTryCatch = async callback => {
-    try {
-      return await callback();
-    } catch (err) {
-      return err;
+    const globalTryCatch = async callback => {
+        try {
+            return await callback();
+        } catch (err) {
+            return err;
+            //Could build an object here that as a status code in it to use in index
+        }
     }
-  }
-  /*const getAllArtists = async (cb, errorCb) => {
-    await dbProvider.Artist.find({}, function(err, artists) {
-          if(err) {
-              errorCb(err);
-          }
-          else {
-              cb(artists);
-          }
-      });
-  };*/
+
   const getAllArtists = async () => {
     return await globalTryCatch(async () => {
-      const artists = await dbProvider.Artist.find({});
-      return artists;
+        const artists = await dbProvider.Artist.find({});
+        return artists;
     });
   }
 
 
-  const getArtistById = (id, cb, errorCb) => {
-    // Your implementation goes here
+  const getArtistById = async (artistId) => {
+    return await globalTryCatch(async () => {
+        const artist = await dbProvider.Artist.findById(artistId);
+        return artist;
+    });
   };
 
   const createArtist = (artist, cb, errorCb) => {
