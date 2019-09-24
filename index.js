@@ -51,16 +51,24 @@ app.post('/api/artists', async function(req, res) {
 app.get('/api/customers', async function(req, res) {
     const result = await customerService.getAllCustomers();
     return res.status(result.status).json(result.body);
-})
+});
 //getCustomerByIdbyid
 
 //getCustomerAuctionBids
 
 //createCustomer
+// ================ AUCTION =================== //
 
+app.get('/api/auctions', async function(req, res) {
+    const result = await auctionService.getAllAuctions();
+    return res.status(result.status).json(result.body);
+});
 
-
-// ================ AUCTIONS =================== //
+app.get('/api/auctions/:auctionId', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const result = await auctionService.getAuctionById(auctionId);
+    return res.status(result.status).json(result.body);
+})
 
 app.get('/api/auctions/:auctionId/winner', async function(req, res) {
     const auctionId = req.params.auctionId;
