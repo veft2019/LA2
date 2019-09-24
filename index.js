@@ -23,7 +23,7 @@ app.get('/api/arts/:artId', async function(req, res) {
     let statusCode = 200;
     const artId = req.params.artId;
     const result = await artService.getArtById(artId);
-    //if(result.includes("Error")) {
+    //if(result["error"]) {
         //statusCode = 404;
     //}
     return res.status(statusCode).json(result);
@@ -40,12 +40,9 @@ app.post('/api/arts', async function (req, res) {
 
 // Artists
 app.get('/api/artists', async function (req, res) {
-    const statusCode = 200;
     const result = await artistService.getAllArtists();
-    if(Object.entries(result).length === 0) {
-        statusCode = 404;
-    }
-    return res.status(statusCode).json(result);
+    console.log(result);
+    return res.status(result.status).json(result.body);
 });
 
 app.get('/api/artists/:artistId', async function(req, res) {
@@ -67,6 +64,7 @@ app.post('/api/artists', async function(req, res) {
     return res.status(statusCode).json(result);
 });
 
+// ================ CUSTOMERS =================== //
 
 // http://localhost:3000
 app.listen(3000, function() {

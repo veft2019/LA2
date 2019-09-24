@@ -6,15 +6,23 @@ const artistService = () => {
         try {
             return await callback();
         } catch (err) {
-            return err;
-            //Could build an object here that as a status code in it to use in index
+            console.log(err);
+            let statusCode = 500;
+            return {
+                status: statusCode,
+                body: err
+            };
+            // TODO: might need to take a look at passing the error into the body
         }
     }
 
   const getAllArtists = async () => {
     return await globalTryCatch(async () => {
         const artists = await dbProvider.Artist.find({});
-        return artists;
+        return {
+            status: 200,
+            body: artists
+        };
     });
   }
 
@@ -22,7 +30,10 @@ const artistService = () => {
   const getArtistById = async (artistId) => {
     return await globalTryCatch(async () => {
         const artist = await dbProvider.Artist.findById(artistId);
-        return artist;
+        return {
+          status: 200,
+          body: artist
+        }
     });
   };
 
@@ -30,7 +41,10 @@ const artistService = () => {
       return await globalTryCatch(async () => {
         const stuff = await dbProvider.Artist.create(artist);
         console.log(stuff);
-        return stuff;
+        return {
+          status: 201,
+          body: stuff
+        }
     });
   };
 
