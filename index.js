@@ -29,6 +29,14 @@ app.get('/api/arts/:artId', async function(req, res) {
     return res.status(statusCode).json(result);
 });
 
+app.post('/api/arts', async function (req, res) {
+    let statusCode = 201;
+    const result = await artService.createArt(req.body);
+    //if(result.name.includes("Error")) {
+        //statusCode = 400;
+    //}
+    return res.status(statusCode).json(result);
+});
 
 // Artists
 app.get('/api/artists', async function (req, res) {
