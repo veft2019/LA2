@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 const artistService = require('./services/artistService');
 const artService = require('./services/artService');
 const customerService = require('./services/customerService');
+const auctionService = require('./services/auctionService');
 
 // ================ ART =================== //
 
@@ -58,6 +59,14 @@ app.get('/api/customers', async function(req, res) {
 //createCustomer
 
 
+
+// ================ AUCTIONS =================== //
+
+app.get('/api/auctions/:auctionId/winner', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const result = await auctionService.getAuctionWinner(auctionId);
+    return res.status(result.status).json(result.body);
+});
 
 // http://localhost:3000
 app.listen(3000, function() {
