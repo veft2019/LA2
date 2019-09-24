@@ -23,8 +23,11 @@ const artService = () => {
        });
     };
 
-    const createArt = (art, cb, errorCb) => {
-        // Your implementation goes here
+    const createArt = async (art) => {
+       return await globalTryCatch(async () => {
+           const tmp = await dbProvider.Art.create(art);
+           return tmp;
+       })
     };
 
     return {
