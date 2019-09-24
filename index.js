@@ -33,27 +33,18 @@ app.get('/api/arts/:artId', async function(req, res) {
 // Artists
 app.get('/api/artists', async function (req, res) {
     const result = await artistService.getAllArtists();
-    console.log(result);
     return res.status(result.status).json(result.body);
 });
 
 app.get('/api/artists/:artistId', async function(req, res) {
-    let statusCode = 200;
     const artistId = req.params.artistId;
     const result = await artistService.getArtistById(artistId);
-    if(result.name.includes("Error")) {
-        statusCode = 404;
-    }
-    return res.status(statusCode).json(result);
+    return res.status(result.status).json(result.body);
 });
 
 app.post('/api/artists', async function(req, res) {
-    let statusCode = 201;
     const result = await artistService.createArtist(req.body);
-    if(result.name.includes("Error")) {
-        statusCode = 400;
-    }
-    return res.status(statusCode).json(result);
+    return res.status(result.status).json(result.body);
 });
 
 

@@ -1,7 +1,6 @@
 const dbProvider = require("../data/db");
 
 const artistService = () => {
-
     const globalTryCatch = async callback => {
         try {
             return await callback();
@@ -29,21 +28,20 @@ const artistService = () => {
 
   const getArtistById = async (artistId) => {
     return await globalTryCatch(async () => {
-        const artist = await dbProvider.Artist.findById(artistId);
+        const result = await dbProvider.Artist.findById(result);
         return {
           status: 200,
-          body: artist
+          body: result
         }
     });
   };
 
   const createArtist = async (artist) => {
       return await globalTryCatch(async () => {
-        const stuff = await dbProvider.Artist.create(artist);
-        console.log(stuff);
+        const result = await dbProvider.Artist.create(artist);
         return {
           status: 201,
-          body: stuff
+          body: result
         }
     });
   };
