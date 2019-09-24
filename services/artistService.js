@@ -33,11 +33,11 @@ const artistService = () => {
         });
     };
 
-  return {
-    getAllArtists,
-    getArtistById,
-    createArtist
-  };
+    return {
+        getAllArtists,
+        getArtistById,
+        createArtist
+    };
 };
 
 module.exports = artistService();
