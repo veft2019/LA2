@@ -30,7 +30,10 @@ const artistService = () => {
   const getArtistById = async (artistId) => {
     return await globalTryCatch(async () => {
         const artist = await dbProvider.Artist.findById(artistId);
-        return artist;
+        return {
+          status: 200,
+          body: artist
+        }
     });
   };
 
@@ -38,7 +41,10 @@ const artistService = () => {
       return await globalTryCatch(async () => {
         const stuff = await dbProvider.Artist.create(artist);
         console.log(stuff);
-        return stuff;
+        return {
+          status: 201,
+          body: stuff
+        }
     });
   };
 
