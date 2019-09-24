@@ -26,20 +26,33 @@ const auctionService = () => {
     const getAuctionWinner = async (_auctionId) => {
         return await globalTryCatch(async () => {
             const result = await dbProvider.Auction.findById(_auctionId);
-            /*if(result.endDate.getTime() > Date.now()) {
+            if(result == null) {
+                return {
+                    status: 404,
+                    body: "Auction not found!"
+                }
+            }
+
+            if(result.endDate.getTime() > Date.now()) {
                 return {
                     status: 209,
                     body: "Conflict! - Auction has not ended!"
                 };
-            }*/
+            }
 
-            //find auction bids by this auction id
-            //get the highest one (sort by highest, take first or something)
-            //get the customer id of that
-            //get the customer with that id
-            const bids = await dbProvider.AuctionBid.find({ auctionId: _auctionId });
-            console.log(bids);
-            return { status: 444, body: "Shit" };
+            const highestBid = await dbProvider.AuctionBid.find({ auctionId: _auctionId }).sort({ price: -1 });
+            if(highestBid.length == 0) {
+                return { 
+                    status: 200, 
+                    body: "This auction has no bids" 
+                };
+            }
+            
+            const customer = await dbProvider.Customer.findById(highestBid[0].customerId);
+            return { 
+                status: 200, 
+                body: customer 
+            };
         });
     };
 
