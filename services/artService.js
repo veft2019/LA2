@@ -1,20 +1,7 @@
 const dbProvider = require("../data/db");
+const globalTryCatch = require("../handlers/globalTryCatch");
 
 const artService = () => {
-    const globalTryCatch = async callback => {
-        try {
-            return await callback();
-        } catch (err) {
-            console.log(err);
-            let statusCode = 500;
-            return {
-                status: statusCode,
-                body: err
-            };
-            // TODO: might need to take a look at passing the error into the body
-        }
-    }
-
     const getAllArts = async() => {
         return await globalTryCatch(async () => {
             const result = await dbProvider.Art.find({});
