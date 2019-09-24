@@ -9,6 +9,7 @@ const artistService = require('./services/artistService');
 const artService = require('./services/artService');
 const customerService = require('./services/customerService');
 const auctionService = require('./services/auctionService');
+
 // ================ ART =================== //
 
 app.get('/api/arts', async function (req, res) {
@@ -47,15 +48,36 @@ app.post('/api/artists', async function(req, res) {
 
 // ================ CUSTOMERS =================== //
 //getAllCustomers
+//http://localhost:3000/api/customers [GET]
 app.get('/api/customers', async function(req, res) {
     const result = await customerService.getAllCustomers();
     return res.status(result.status).json(result.body);
 });
+
 //getCustomerByIdbyid
+//http://localhost:3000/api/customers/:customerId [GET]
+app.get('/api/customers/:customerId', async function(req, res) {
+    const customerId = req.params.customerId;
+    const result = await customerService.getCustomerById(customerId);
+    return res.status(result.status).json(result.body);
+});
 
 //getCustomerAuctionBids
+////http://localhost:3000/api/customers/:customerId [GET]
+//VIRKAR EKKI
+app.get('/api/customers/:customerId/auction-bids', async function(req, res) {
+    const customerId = req.params.customerId;
+    const result = await customerService.getCustomerAuctionBids(customerId);
+    return res.status(result.status).json(result.body);
+});
 
 //createCustomer
+//http://localhost:3000/api/customers/[POST]
+app.post('/api/customers', async function(req, res) {
+    const result = await customerService.createCustomer(req.body);
+    return res.status(result.status).json(result.body);
+});
+
 // ================ AUCTION =================== //
 
 app.get('/api/auctions', async function(req, res) {
@@ -71,6 +93,12 @@ app.get('/api/auctions/:auctionId', async function(req, res) {
 
 app.post('/api/auctions', async function(req, res) {
     const  result = await auctionService.createAuction(req.body);
+    return res.status(result.status).json(result.body);
+});
+
+app.get('/api/auctions/:auctionId/winner', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const result = await auctionService.getAuctionWinner(auctionId);
     return res.status(result.status).json(result.body);
 });
 

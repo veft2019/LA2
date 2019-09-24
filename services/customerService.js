@@ -1,20 +1,8 @@
 
 const dbProvider = require("../data/db");
-const customerService = () => {
-    const globalTryCatch = async callback => {
-        try {
-            return await callback();
-        } catch (err) {
-            console.log(err);
-            let statusCode = 500;
-            return {
-                status: statusCode,
-                body: err
-            };
-            // TODO:  might need to take a look at passing the error into the body
-        }
-    }
+const globalTryCatch = require("../handlers/globalTryCatch");
 
+const customerService = () => {
   const getAllCustomers = async() => {
     return await globalTryCatch(async () => {
         const customers = await dbProvider.Customer.find({});
@@ -25,16 +13,34 @@ const customerService = () => {
     });
   };
 
-  const getCustomerById = (id, cb, errorCb) => {
-    // Your implementation goes here
+  const getCustomerById = async (customerId) => {
+    return await globalTryCatch(async () => {
+        const result = await dbProvider.Customer.findById(customerId);
+        return {
+            status: 200,
+            body: result
+        };
+    });
   };
 
-  const getCustomerAuctionBids = (customerId, cb, errorCb) => {
-    // Your implementation goes here
+  const getCustomerAuctionBids = async (customerId) => {
+    return await globalTryCatch(async () => {
+        const result = await dbProvider.AuctionBid.find({ customerId: customerId });
+        return {
+            status: 200,
+            body: result
+        };
+    });
   };
 
-  const createCustomer = (customer, cb, errorCb) => {
-    // Your implementation goes here
+  const createCustomer = async (customer) => {
+    return await globalTryCatch(async () => {
+        const result = await dbProvider.Customer.create(customer);
+        return {
+            status: 201,
+            body: result
+        };
+    });
   };
 
   return {
