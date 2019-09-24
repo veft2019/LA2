@@ -15,8 +15,14 @@ const customerService = () => {
         }
     }
 
-  const getAllCustomers = (cb, errorCb) => {
-    // Your implementation goes here
+  const getAllCustomers = async() => {
+    return await globalTryCatch(async () => {
+        const customers = await dbProvider.Customer.find({});
+        return {
+            status: 200,
+            body: customers
+        };
+    });
   };
 
   const getCustomerById = (id, cb, errorCb) => {

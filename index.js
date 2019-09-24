@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 
 const artistService = require('./services/artistService');
 const artService = require('./services/artService');
+const customerService = require('./services/customerService');
 
 // ================ ART =================== //
 
@@ -45,6 +46,16 @@ app.post('/api/artists', async function(req, res) {
 });
 
 // ================ CUSTOMERS =================== //
+//getAllCustomers
+app.get('/api/customers', async function(req, res) {
+    const result = await customerService.getAllCustomers();
+    return res.status(result.status).json(result.body);
+})
+//getCustomerByIdbyid
+
+//getCustomerAuctionBids
+
+//createCustomer
 
 
 
