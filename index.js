@@ -101,6 +101,20 @@ app.get('/api/auctions/:auctionId/winner', async function(req, res) {
     return res.status(result.status).json(result.body);
 });
 
+app.get('/api/auctions/:auctionId/bids', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const result = await auctionService.getAuctionBidsWithinAuction(auctionId);
+    return res.status(result.status).json(result.body);
+});
+
+app.post('/api/auctions/:auctionId/bids', async function(req, res) {
+    const auctionId = req.params.auctionId;
+    const customerId = req.body.customerId;
+    const price = req.body.price;
+    const result = await auctionService.placeNewBid(auctionId, customerId, price);
+    return res.status(result.status).json(result.body);
+});
+
 // http://localhost:3000
 app.listen(3000, function() {
   console.log('Server is listening on port 3000');
