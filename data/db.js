@@ -6,7 +6,8 @@ const auctionBidSchema = require('../schemas/auctionBid');
 const customerSchema = require('../schemas/customer');
 
 const connection = mongoose.createConnection('mongodb://db_user:abc12345@ds317808.mlab.com:17808/mansion_de_subastas2019', {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
 module.exports = {
