@@ -22,7 +22,7 @@ const customerService = () => {
         };
     });
   };
-// VIRKAR EKKI
+
   const getCustomerAuctionBids = async (customerId) => {
     return await globalTryCatch(async () => {
         const result = await dbProvider.AuctionBid.find({ customerId: customerId });
