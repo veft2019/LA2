@@ -26,8 +26,6 @@ const customerService = () => {
   const getCustomerAuctionBids = async (customerId) => {
     return await globalTryCatch(async () => {
         const result = await dbProvider.AuctionBid.find({ customerId: customerId });
-        console.log("SERVICE");
-        console.log(result);
         return {
             status: 200,
             body: result
