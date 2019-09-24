@@ -1,3 +1,6 @@
+const dbProvider = require("../data/db");
+const globalTryCatch = require("../handlers/globalTryCatch");
+
 const auctionService = () => {
     const getAllAuctions = (cb, errorCb) => {
         // Your implementation goes here
