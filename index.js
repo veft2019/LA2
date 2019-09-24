@@ -91,6 +91,11 @@ app.get('/api/auctions/:auctionId', async function(req, res) {
     return res.status(result.status).json(result.body);
 })
 
+app.post('/api/auctions', async function(req, res) {
+    const  result = await auctionService.createAuction(req.body);
+    return res.status(result.status).json(result.body);
+});
+
 app.get('/api/auctions/:auctionId/winner', async function(req, res) {
     const auctionId = req.params.auctionId;
     const result = await auctionService.getAuctionWinner(auctionId);
