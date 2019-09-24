@@ -75,6 +75,7 @@ app.get('/api/customers/:customerId/auction-bids', async function(req, res) {
 //http://localhost:3000/api/customers/[POST]
 app.post('/api/customers', async function(req, res) {
     const result = await customerService.createCustomer(req.body);
+    return res.status(result.status).json(result.body);
 });
 
 // ================ AUCTION =================== //
