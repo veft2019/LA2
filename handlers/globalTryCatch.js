@@ -8,7 +8,6 @@ const globalTryCatch = async callback => {
             status: statusCode,
             body: err
         };
-        // TODO: might need to take a look at passing the error into the body
     }
 }
 
