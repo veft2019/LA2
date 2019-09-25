@@ -41,7 +41,7 @@ const artService = () => {
             const artist = await dbProvider.Artist.findById(art.artistId);
             if(artist == null) {
                 return {
-                    status: 404,
+                    status: 400,
                     body: "Artist with this id was not found"
                 }
             }

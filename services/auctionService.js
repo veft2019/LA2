@@ -74,7 +74,7 @@ const auctionService = () => {
             const art = await dbProvider.Art.findById(auction.artId);
             if (art == null) {
                 return {
-                    status: 404,
+                    status: 400,
                     body: "Art work not found"
                 }
             }
@@ -133,7 +133,7 @@ const auctionService = () => {
         const auction = await dbProvider.Auction.findById(_auctionId);
         if (auction == null) {
             return {
-                status: 404,
+                status: 400,
                 body: "Auction with this id was not found!"
             }
         }
@@ -142,7 +142,7 @@ const auctionService = () => {
         const customer = await dbProvider.Customer.findById(_customerId);
         if (customer == null) {
             return {
-                status: 404,
+                status: 400,
                 body: "Customer with this id was not found!"
             }
         }
@@ -179,7 +179,7 @@ const auctionService = () => {
 
         return {
             status: 202,
-            body: "Success - Your bid has been placed!"
+            body: "Your bid has been accepted!"
         }
     }
 
