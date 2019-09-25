@@ -114,6 +114,13 @@ const auctionService = () => {
             }
 
             const result = await dbProvider.AuctionBid.find({auctionId: _auctionId}).sort({price: -1});
+            if(result.length == 0) {
+                return {
+                    status: 404,
+                    body: "No bids were found for this auction"
+                }
+            }
+
             return {
                 status: 200,
                 body: result
