@@ -80,12 +80,15 @@ const auctionService = () => {
             }
 
             const exists = await dbProvider.Auction.find({artId: auction.artId});
-            if (exists.length != 0) {
-                return {
-                    status: 409,
-                    body: "Conflict! - Auction already exists for this art item"
+            for(let i = 0; i < exists.length; i++) {
+                if(exists[i].endDate > Date.now()) {
+                    return {
+                        status: 409,
+                        body: "Conflict! - Auction already on going for this art item"
+                    }
                 }
             }
+            
 
             if (!art.isAuctionItem) {
                 return {
