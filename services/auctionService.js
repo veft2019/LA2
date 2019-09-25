@@ -160,10 +160,20 @@ const auctionService = () => {
         const highestBid = await dbProvider.AuctionBid.find({auctionId: _auctionId}).sort({price: -1});
 
         //Check if price is higher than minimum price
-        if (auction.minimumPrice >= _price || highestBid[0].price >= _price) {
+        if (auction.minimumPrice >= _price) {
             return {
                 status: 412,
                 body: "Bidding price too low!"
+            }
+        }
+
+        //Check if price is higher than highest bid
+        if (highestBid.length != 0) {
+            if (highestBid[0].price >= _price) {
+                return {
+                    status: 412,
+                    body: "Bidding price too low!"
+                }
             }
         }
 
@@ -175,7 +185,7 @@ const auctionService = () => {
         });
 
         //Update auction winner prtop of auction to customerId if everything valid
-        await dbProvider.Auction.findById(auctionId).updateOne({auctionWinner: _customerId});
+        await dbProvider.Auction.findById(_auctionId).updateOne({auctionWinner: _customerId});
 
         return {
             status: 202,
